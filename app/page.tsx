@@ -4,8 +4,9 @@ import { DesignTab } from "@/components/DesignTab";
 import { PastDesignsTab } from "@/components/PastDesignsTab";
 import { ComponentsTab } from "@/components/ComponentsTab";
 import { ModelComparisonTab } from "@/components/ModelComparisonTab";
+import { LearningTab } from "@/components/LearningTab";
 
-const TABS = ["Design", "Past Designs", "Components", "Model Comparison"] as const;
+const TABS = ["Design", "Past Designs", "Components", "Model Comparison", "Self-Learning"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function Page() {
@@ -29,6 +30,7 @@ export default function Page() {
       {tab === "Past Designs" && <PastDesignsTab />}
       {tab === "Components" && <ComponentsTab />}
       {tab === "Model Comparison" && <ModelComparisonTab />}
+      {tab === "Self-Learning" && <LearningTab />}
     </main>
   );
 }
