@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
           weights: eff.weights,
           bias: eff.bias,
           preferenceStatements: eff.statements,
-          model: body.model ?? (process.env.ANTHROPIC_API_KEY ? "claude-opus-4-8" : "deterministic"),
+          model: body.model ?? (process.env.ANTHROPIC_API_KEY ? "claude-sonnet-4-6" : "deterministic"),
           bus,
           store,
           runId,

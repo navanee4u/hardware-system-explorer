@@ -28,7 +28,7 @@ function loadEnvLocal() {
 loadEnvLocal();
 
 const KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
-const MODEL = process.env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
+const MODEL = process.env.GEMINI_IMAGE_MODEL || "gemini-3.1-flash-image"; // Nano Banana 2
 if (!KEY) {
   console.error("✗ GEMINI_API_KEY not set. Add it to .env.local (https://aistudio.google.com/apikey).");
   process.exit(1);

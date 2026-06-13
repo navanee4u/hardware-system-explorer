@@ -76,6 +76,9 @@ export function ModelComparisonTab() {
     if (!runs) return [];
     const byModel = new Map<ModelId, DesignRun[]>();
     for (const run of runs) {
+      // Deterministic runs are the offline baseline (identical regardless of model),
+      // so they're excluded here — this tab contrasts the LLM models against each other.
+      if (run.model === "deterministic") continue;
       const list = byModel.get(run.model) ?? [];
       list.push(run);
       byModel.set(run.model, list);

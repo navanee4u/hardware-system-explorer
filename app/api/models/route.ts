@@ -10,8 +10,8 @@ export const dynamic = "force-dynamic";
 
 const MODELS = [
   { id: "claude-fable-5", label: "Claude Fable 5" },
-  { id: "claude-opus-4-8", label: "Claude Opus 4.8 (default)" },
-  { id: "claude-sonnet-4-6", label: "Claude Sonnet 4.6" },
+  { id: "claude-opus-4-8", label: "Claude Opus 4.8" },
+  { id: "claude-sonnet-4-6", label: "Claude Sonnet 4.6 (default)" },
   { id: "deterministic", label: "Deterministic (no LLM)" },
 ];
 
@@ -19,7 +19,7 @@ export async function GET() {
   const hasAnthropic = Boolean(process.env.ANTHROPIC_API_KEY);
   return Response.json({
     models: MODELS,
-    defaultModel: hasAnthropic ? process.env.DEFAULT_MODEL ?? "claude-opus-4-8" : "deterministic",
+    defaultModel: hasAnthropic ? process.env.DEFAULT_MODEL ?? "claude-sonnet-4-6" : "deterministic",
     capability: {
       llmProposer: hasAnthropic,
       webSearch: hasAnthropic,
