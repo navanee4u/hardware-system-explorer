@@ -1,9 +1,11 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { PROFILES, type DesignRun, type Event, type Profile } from "@/lib/schema";
+import { PROFILES, type DesignRun, type Event, type Profile, type Rubric } from "@/lib/schema";
 import { api, streamRun, type ModelsInfo, type PreferencesInfo } from "./api";
 import { Bom, RankBadge, RubricChecklist, Scorecard } from "./ui";
 import { Telemetry } from "./Telemetry";
+import { ExampleGallery } from "./ExampleGallery";
+import type { Example } from "@/lib/examples";
 
 const SAMPLE_REQUIREMENT =
   "Design a self-contained outdoor inspection drone payload that captures imagery of power lines and rooftops " +
@@ -21,6 +23,8 @@ export function DesignTab() {
   const [models, setModels] = useState<ModelsInfo | null>(null);
   const [model, setModel] = useState<string>("");
   const [requirement, setRequirement] = useState(SAMPLE_REQUIREMENT);
+  const [rubric, setRubric] = useState<Rubric | undefined>(undefined);
+  const [activeExample, setActiveExample] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
   const [events, setEvents] = useState<Event[]>([]);
   const [run, setRun] = useState<DesignRun | null>(null);
@@ -53,7 +57,7 @@ export function DesignTab() {
     abortRef.current = ac;
     try {
       const runId = await streamRun(
-        { requirement, model },
+        { requirement, model, rubric },
         (e) => setEvents((prev) => [...prev, e]),
         ac.signal,
       );
@@ -95,15 +99,31 @@ export function DesignTab() {
     refreshPrefs();
   }
 
+  function loadExample(ex: Example) {
+    setRequirement(ex.requirement);
+    setRubric(ex.rubric);
+    setActiveExample(ex.id);
+    setRun(null);
+    setEvents([]);
+    setChosen(null);
+    setDistilled(null);
+  }
+
   return (
     <div style={{ display: "grid", gap: 16 }}>
+      {/* example gallery — click to load a platform's requirement + rubric */}
+      <ExampleGallery onSelect={loadExample} activeId={activeExample} />
+
       {/* header: intake + model + learning panel */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 16 }}>
         <div className="card">
           <span className="eyebrow">Requirement</span>
           <textarea
             value={requirement}
-            onChange={(e) => setRequirement(e.target.value)}
+            onChange={(e) => {
+              setRequirement(e.target.value);
+              setActiveExample(null);
+            }}
             rows={4}
             style={{ width: "100%", marginTop: 8, resize: "vertical" }}
           />

@@ -10,6 +10,7 @@ import type {
   Preference,
   Profile,
   RankWeights,
+  Rubric,
 } from "@/lib/schema";
 
 export interface ModelsInfo {
@@ -52,7 +53,7 @@ export const api = {
  * with the runId (from the X-Run-Id header) when the stream closes.
  */
 export async function streamRun(
-  body: { requirement?: string; model?: string; weights?: RankWeights },
+  body: { requirement?: string; model?: string; weights?: RankWeights; rubric?: Rubric },
   onEvent: (e: Event) => void,
   signal?: AbortSignal,
 ): Promise<string | null> {
