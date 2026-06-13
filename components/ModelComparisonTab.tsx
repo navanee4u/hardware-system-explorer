@@ -164,8 +164,8 @@ export function ModelComparisonTab() {
   if (err) {
     return (
       <div className="card">
-        <span className="eyebrow">Model comparison</span>
-        <div style={{ marginTop: 10, fontSize: 13, color: "var(--rf-fail)" }}>
+        <span className="eyebrow">[ HOW THE AI MODELS COMPARE ]</span>
+        <div style={{ marginTop: 10, fontSize: 13.5, color: "var(--rf-fail)" }}>
           Could not load runs.
         </div>
       </div>
@@ -175,8 +175,8 @@ export function ModelComparisonTab() {
   if (!runs) {
     return (
       <div className="card">
-        <span className="eyebrow">Model comparison</span>
-        <div style={{ marginTop: 10, fontSize: 13, color: "var(--rf-muted)" }}>Loading…</div>
+        <span className="eyebrow">[ HOW THE AI MODELS COMPARE ]</span>
+        <div style={{ marginTop: 10, fontSize: 13.5, color: "var(--rf-muted)" }}>Loading…</div>
       </div>
     );
   }
@@ -184,10 +184,10 @@ export function ModelComparisonTab() {
   if (runs.length === 0 || aggs.length === 0) {
     return (
       <div className="card">
-        <span className="eyebrow">Model comparison</span>
-        <div style={{ marginTop: 10, fontSize: 13, color: "var(--rf-muted)" }}>
-          No runs yet — run designs across models (try the model selector on the Design tab) to
-          compare.
+        <span className="eyebrow">[ HOW THE AI MODELS COMPARE ]</span>
+        <div style={{ marginTop: 10, fontSize: 13.5, lineHeight: 1.5, color: "var(--rf-muted)" }}>
+          No runs yet — run the same requirement across models (use the model selector on the Design
+          tab) to compare how each AI model produces the best designs.
         </div>
       </div>
     );
@@ -197,11 +197,15 @@ export function ModelComparisonTab() {
     <div style={{ display: "grid", gap: 16 }}>
       {/* header + legend */}
       <div className="card">
-        <span className="eyebrow">Model comparison</span>
+        <span className="eyebrow">[ HOW THE AI MODELS COMPARE ]</span>
+        <div style={{ marginTop: 8, fontSize: 15, lineHeight: 1.5, color: "var(--rf-text)", maxWidth: 760 }}>
+          How the different AI models compare at producing the best designs — same requirement,
+          different model. Each one is given the identical problem; the panels below contrast the
+          designs they produce.
+        </div>
         <div style={{ marginTop: 6, fontSize: 13, color: "var(--rf-muted)" }}>
           Aggregated across {runs.length} stored run{runs.length === 1 ? "" : "s"} ·{" "}
-          {aggs.length} model{aggs.length === 1 ? "" : "s"}. How each Claude model produces the best
-          verified designs.
+          {aggs.length} model{aggs.length === 1 ? "" : "s"}.
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginTop: 12 }}>
           {aggs.map((a) => (
@@ -209,9 +213,9 @@ export function ModelComparisonTab() {
               <span
                 style={{ width: 12, height: 12, borderRadius: 3, background: a.color, flex: "none" }}
               />
-              <span style={{ fontSize: 13, fontWeight: 600 }}>{a.label}</span>
+              <span style={{ fontSize: 14, fontWeight: 600 }}>{a.label}</span>
               <span
-                style={{ fontSize: 11, color: "var(--rf-muted)", fontFamily: "var(--rf-mono)" }}
+                style={{ fontSize: 12, color: "var(--rf-muted)", fontFamily: "var(--rf-mono)" }}
               >
                 {a.runs} run{a.runs === 1 ? "" : "s"}
               </span>
@@ -222,10 +226,10 @@ export function ModelComparisonTab() {
 
       {/* 1. Best-design quality by dimension — grouped bars */}
       <div className="card">
-        <span className="eyebrow">Best-design quality by dimension</span>
-        <div style={{ fontSize: 12, color: "var(--rf-muted)", marginTop: 4, marginBottom: 6 }}>
-          Average normalized SWAP-C sub-scores of each model&apos;s rank #1 feasible design (1 =
-          best).
+        <span className="eyebrow">[ BEST-DESIGN QUALITY BY DIMENSION ]</span>
+        <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", marginTop: 6, marginBottom: 8 }}>
+          For each model, the average normalized SWAP-C sub-scores of its top-ranked feasible design.
+          Taller bars are better (1 = best on that dimension).
         </div>
         <GroupedBars aggs={aggs} />
       </div>
@@ -236,19 +240,20 @@ export function ModelComparisonTab() {
       >
         {/* 2. iterations to converge */}
         <div className="card">
-          <span className="eyebrow">Iterations to converge</span>
-          <div style={{ fontSize: 12, color: "var(--rf-muted)", marginTop: 4, marginBottom: 10 }}>
-            Avg inner-loop passes to feasibility (with min–max spread). Fewer = better
-            self-correction.
+          <span className="eyebrow">[ ITERATIONS TO CONVERGE ]</span>
+          <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", marginTop: 6, marginBottom: 10 }}>
+            Average inner-loop passes each model needs to reach a feasible design (dot = average, bar
+            = min–max spread). Fewer passes means better self-correction.
           </div>
           <IterChart aggs={aggs} />
         </div>
 
         {/* 3. feasibility rate */}
         <div className="card">
-          <span className="eyebrow">Feasibility rate</span>
-          <div style={{ fontSize: 12, color: "var(--rf-muted)", marginTop: 4, marginBottom: 10 }}>
-            Share of candidates that reach a feasible design.
+          <span className="eyebrow">[ FEASIBILITY RATE ]</span>
+          <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", marginTop: 6, marginBottom: 10 }}>
+            Share of each model&apos;s candidate designs that satisfy every hard requirement. Higher
+            is better.
           </div>
           <div style={{ display: "grid", gap: 10 }}>
             {aggs.map((a) => (
@@ -269,18 +274,20 @@ export function ModelComparisonTab() {
 
         {/* 4. cost of thinking */}
         <div className="card">
-          <span className="eyebrow">Cost of thinking</span>
-          <div style={{ fontSize: 12, color: "var(--rf-muted)", marginTop: 4, marginBottom: 10 }}>
-            Tokens &amp; wall-clock per run, averaged. Deterministic runs report no tokens.
+          <span className="eyebrow">[ COST OF THINKING ]</span>
+          <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", marginTop: 6, marginBottom: 10 }}>
+            What each model spends to get there — tokens and wall-clock time per run, averaged. Lower
+            is cheaper. Deterministic runs report no tokens.
           </div>
           <CostTable aggs={aggs} />
         </div>
 
         {/* 5. agreement rate */}
         <div className="card">
-          <span className="eyebrow">Agreement rate</span>
-          <div style={{ fontSize: 12, color: "var(--rf-muted)", marginTop: 4, marginBottom: 10 }}>
-            How often the human kept the agent&apos;s #1 pick.
+          <span className="eyebrow">[ AGREEMENT RATE ]</span>
+          <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", marginTop: 6, marginBottom: 10 }}>
+            How often the human kept this model&apos;s #1 pick instead of overriding it. Higher means
+            its top choice matched human taste.
           </div>
           <div style={{ display: "grid", gap: 10 }}>
             {aggs.map((a) => (
@@ -449,8 +456,8 @@ function RateRow({
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-        <span style={{ fontSize: 12, fontWeight: 600 }}>{label}</span>
-        <span style={{ fontSize: 11, color: "var(--rf-muted)", fontFamily: "var(--rf-mono)" }}>
+        <span style={{ fontSize: 13, fontWeight: 600 }}>{label}</span>
+        <span style={{ fontSize: 12, color: "var(--rf-muted)", fontFamily: "var(--rf-mono)" }}>
           {caption}
         </span>
       </div>
@@ -476,7 +483,7 @@ function CostTable({ aggs }: { aggs: ModelAgg[] }) {
           display: "grid",
           gridTemplateColumns: "1fr 64px 64px",
           gap: 8,
-          fontSize: 10,
+          fontSize: 12,
           color: "var(--rf-muted)",
           fontFamily: "var(--rf-mono)",
           textTransform: "uppercase",

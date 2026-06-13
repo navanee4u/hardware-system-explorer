@@ -138,7 +138,7 @@ export function ComponentsTab() {
     textAlign: "left",
     padding: "8px 10px",
     fontFamily: "var(--rf-mono)",
-    fontSize: 11,
+    fontSize: 12,
     letterSpacing: "0.04em",
     textTransform: "uppercase",
     color: "var(--rf-muted)",
@@ -149,14 +149,14 @@ export function ComponentsTab() {
   const numHeader: React.CSSProperties = { ...sortableHeader, textAlign: "right" };
   const cell: React.CSSProperties = {
     padding: "8px 10px",
-    fontSize: 12,
+    fontSize: 13,
     borderBottom: "1px solid var(--rf-border)",
     verticalAlign: "top",
   };
   const monoCell: React.CSSProperties = {
     ...cell,
     fontFamily: "var(--rf-mono)",
-    fontSize: 11,
+    fontSize: 12,
     textAlign: "right",
     whiteSpace: "nowrap",
   };
@@ -167,19 +167,44 @@ export function ComponentsTab() {
       <div className="card">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
           <div>
-            <span className="eyebrow">Component library</span>
-            <div style={{ fontSize: 13, color: "var(--rf-muted)", marginTop: 4 }}>
-              Every part ever discovered across all runs and providers — the growing asset.
+            <span className="eyebrow">COMPONENT LIBRARY</span>
+            <div style={{ fontSize: 13.5, color: "var(--rf-muted)", marginTop: 5, lineHeight: 1.5, maxWidth: 620 }}>
+              The growing library of every real part the engine has discovered across all runs — it keeps
+              learning new parts and reusing them in future designs. Search or filter to explore it.
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
             <span style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--rf-mono)" }}>
               {loading ? "—" : filtered.length}
             </span>
-            <span style={{ fontSize: 12, color: "var(--rf-muted)" }}>
+            <span style={{ fontSize: 13, color: "var(--rf-muted)" }}>
               {filtered.length === total ? `component${total === 1 ? "" : "s"}` : `of ${total}`}
             </span>
           </div>
+        </div>
+
+        {/* legend explaining where each part came from (the Source column) */}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "6px 16px",
+            marginTop: 12,
+            fontSize: 12.5,
+            color: "var(--rf-muted)",
+            alignItems: "center",
+          }}
+        >
+          <span style={{ fontWeight: 600, color: "var(--rf-text)" }}>Where parts come from:</span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span className="badge badge-kb">kb</span> curated internal catalog
+          </span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span className="badge badge-web">web</span> found via live web search
+          </span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span className="badge badge-rapidflare">rapidflare</span> Rapidflare in-house part
+          </span>
         </div>
 
         <div style={{ display: "flex", gap: 10, marginTop: 12, flexWrap: "wrap", alignItems: "center" }}>
@@ -223,7 +248,9 @@ export function ComponentsTab() {
                 <th style={headerCell}>Vendor</th>
                 <th style={headerCell}>Part #</th>
                 <th style={headerCell}>Subsystem</th>
-                <th style={headerCell}>Source</th>
+                <th style={headerCell} title="Where this part was discovered: internal catalog, web search, or a Rapidflare in-house part">
+                  Source
+                </th>
                 <th style={numHeader} onClick={() => toggleSort("mass_g")} title="Sort by mass">
                   Mass g {sortArrow("mass_g")}
                 </th>
@@ -253,18 +280,18 @@ export function ComponentsTab() {
                     <td style={cell}>
                       <div style={{ fontWeight: 600 }}>{c.name}</div>
                       {usedIn > 0 && (
-                        <div style={{ fontSize: 10, color: "var(--rf-muted)", marginTop: 2 }}>
+                        <div style={{ fontSize: 11.5, color: "var(--rf-muted)", marginTop: 2 }}>
                           used in {usedIn} design{usedIn === 1 ? "" : "s"}
                         </div>
                       )}
                       {c.tags && c.tags.length > 0 && (
-                        <div style={{ fontSize: 10, color: "var(--rf-muted)", marginTop: 2 }}>
+                        <div style={{ fontSize: 11.5, color: "var(--rf-muted)", marginTop: 2 }}>
                           {c.tags.join(" · ")}
                         </div>
                       )}
                     </td>
                     <td style={cell}>{c.vendor}</td>
-                    <td style={{ ...cell, fontFamily: "var(--rf-mono)", fontSize: 11, color: "var(--rf-muted)" }}>
+                    <td style={{ ...cell, fontFamily: "var(--rf-mono)", fontSize: 12, color: "var(--rf-muted)" }}>
                       {c.part_number}
                     </td>
                     <td style={cell}>
@@ -276,7 +303,7 @@ export function ComponentsTab() {
                     <td style={monoCell}>{fmt(num(c.specs.mass_g))}</td>
                     <td style={monoCell}>{fmt(num(c.specs.cost_usd))}</td>
                     <td style={monoCell}>{fmt(num(c.specs.active_w))}</td>
-                    <td style={{ ...cell, fontFamily: "var(--rf-mono)", fontSize: 11, whiteSpace: "nowrap" }}>
+                    <td style={{ ...cell, fontFamily: "var(--rf-mono)", fontSize: 12, whiteSpace: "nowrap" }}>
                       {specStr ? specStr : <span style={{ color: "var(--rf-muted)" }}>—</span>}
                     </td>
                   </tr>
@@ -288,17 +315,19 @@ export function ComponentsTab() {
 
         {/* empty / loading states */}
         {loading && (
-          <div style={{ padding: "24px 14px", fontSize: 12, color: "var(--rf-muted)" }}>Loading library…</div>
+          <div style={{ padding: "24px 14px", fontSize: 13, color: "var(--rf-muted)" }}>Loading library…</div>
         )}
         {!loading && total === 0 && (
           <div style={{ padding: "32px 14px", textAlign: "center", color: "var(--rf-muted)" }}>
-            <div style={{ fontSize: 13 }}>
-              {error ? "Could not load components." : "No components yet — run a design first."}
+            <div style={{ fontSize: 14 }}>
+              {error
+                ? "Could not load components."
+                : "No components yet — run a design first and the parts it finds will be saved here."}
             </div>
           </div>
         )}
         {!loading && total > 0 && filtered.length === 0 && (
-          <div style={{ padding: "24px 14px", textAlign: "center", fontSize: 12, color: "var(--rf-muted)" }}>
+          <div style={{ padding: "24px 14px", textAlign: "center", fontSize: 13, color: "var(--rf-muted)" }}>
             No components match your filters.
           </div>
         )}

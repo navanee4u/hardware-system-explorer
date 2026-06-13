@@ -6,6 +6,7 @@
  * per-card gradient stands in, so the gallery looks intentional either way.
  */
 import { EXAMPLES, type Example } from "@/lib/examples";
+import { PROFILE_META } from "@/lib/profiles";
 
 // Distinct fallback gradients (Rapidflare-adjacent hues) keyed by index.
 const GRADIENTS = [
@@ -30,11 +31,17 @@ export function ExampleGallery({
 }) {
   return (
     <div className="card">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-        <span className="eyebrow">Example systems</span>
-        <span style={{ fontSize: 11, color: "var(--rf-muted)" }}>
-          Click a platform to load its requirement
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12, flexWrap: "wrap" }}>
+        <span className="eyebrow">Start from an example system</span>
+        <span style={{ fontSize: 12.5, color: "var(--rf-muted)" }}>
+          Click a platform to load a ready-to-run requirement
         </span>
+      </div>
+      <div style={{ fontSize: 12.5, color: "var(--rf-muted)", lineHeight: 1.4, marginTop: 6 }}>
+        Pick a starting point, then run to generate three ranked designs —{" "}
+        <span style={{ color: PROFILE_META.Efficiency.color, fontWeight: 600 }}>{PROFILE_META.Efficiency.label}</span>,{" "}
+        <span style={{ color: PROFILE_META.Compact.color, fontWeight: 600 }}>{PROFILE_META.Compact.label}</span>, and{" "}
+        <span style={{ color: PROFILE_META.Value.color, fontWeight: 600 }}>{PROFILE_META.Value.label}</span>.
       </div>
       <div
         style={{
@@ -75,15 +82,16 @@ export function ExampleGallery({
               >
                 {!ex.feasibleByDesign && (
                   <span
+                    title="Stress test — intentionally hard requirements that may not be fully satisfiable, to show honest results"
                     style={{
                       position: "absolute",
                       top: 6,
                       right: 6,
-                      fontSize: 9,
+                      fontSize: 11,
                       fontFamily: "var(--rf-mono)",
                       background: "rgba(15,23,42,0.78)",
                       color: "#fff",
-                      padding: "2px 6px",
+                      padding: "2px 7px",
                       borderRadius: 6,
                     }}
                   >
@@ -92,8 +100,8 @@ export function ExampleGallery({
                 )}
               </div>
               <div style={{ padding: "8px 10px 10px" }}>
-                <div style={{ fontSize: 13, fontWeight: 600, lineHeight: 1.2 }}>{ex.title}</div>
-                <div style={{ fontSize: 11, color: "var(--rf-muted)", marginTop: 3, lineHeight: 1.3 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, lineHeight: 1.25 }}>{ex.title}</div>
+                <div style={{ fontSize: 12.5, color: "var(--rf-muted)", marginTop: 3, lineHeight: 1.35 }}>
                   {ex.tagline}
                 </div>
               </div>

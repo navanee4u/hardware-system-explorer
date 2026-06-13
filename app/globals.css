@@ -27,13 +27,13 @@ body {
   background: var(--rf-bg);
   color: var(--rf-text);
   font-family: var(--rf-sans);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.55;
 }
 
 .eyebrow {
   font-family: var(--rf-mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--rf-muted);
@@ -55,7 +55,7 @@ button {
   color: var(--rf-text);
   border-radius: 8px;
   padding: 8px 14px;
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   transition: background 0.12s, border-color 0.12s;
 }
@@ -87,7 +87,7 @@ button {
 }
 .tab {
   padding: 10px 16px;
-  font-size: 13px;
+  font-size: 14.5px;
   border: none;
   background: none;
   color: var(--rf-muted);
@@ -104,7 +104,7 @@ button {
 /* provenance badges */
 .badge {
   font-family: var(--rf-mono);
-  font-size: 10px;
+  font-size: 11.5px;
   padding: 1px 6px;
   border-radius: 4px;
   text-transform: uppercase;
@@ -118,7 +118,7 @@ button {
 .rank {
   font-family: var(--rf-mono);
   font-weight: 700;
-  font-size: 12px;
+  font-size: 12.5px;
   border-radius: 999px;
   padding: 2px 9px;
   border: 1px solid var(--rf-border);
@@ -128,7 +128,7 @@ button {
 .rank-3 { background: #fff; color: var(--rf-muted); }
 
 /* rubric checks */
-.check { display: flex; gap: 8px; align-items: baseline; font-size: 12px; padding: 3px 0; }
+.check { display: flex; gap: 8px; align-items: baseline; font-size: 12.5px; line-height: 1.5; padding: 3px 0; }
 .dot { width: 8px; height: 8px; border-radius: 999px; flex: none; margin-top: 4px; }
 .dot-pass { background: var(--rf-pass); }
 .dot-fail { background: var(--rf-fail); }
@@ -139,7 +139,7 @@ button {
 .bar-fill { height: 100%; background: var(--rf-primary); border-radius: 999px; }
 
 /* telemetry */
-.telemetry { font-family: var(--rf-mono); font-size: 11px; line-height: 1.7; }
+.telemetry { font-family: var(--rf-mono); font-size: 12px; line-height: 1.75; }
 .telemetry-row { display: flex; gap: 8px; padding: 1px 0; white-space: nowrap; }
 .telemetry-row .t-type { flex: none; width: 150px; color: var(--rf-muted); }
 .ev-provider { color: #0369a1; }
@@ -152,13 +152,13 @@ button {
 
 .col-tag {
   font-family: var(--rf-mono);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--rf-secondary);
 }
-.subsys { font-family: var(--rf-mono); font-size: 10px; color: var(--rf-muted); text-transform: uppercase; }
+.subsys { font-family: var(--rf-mono); font-size: 11.5px; color: var(--rf-muted); text-transform: uppercase; }
 input, textarea, select {
   font-family: inherit;
-  font-size: 13px;
+  font-size: 14px;
   border: 1px solid var(--rf-border);
   border-radius: 8px;
   padding: 8px 10px;
@@ -166,3 +166,7 @@ input, textarea, select {
   background: #fff;
 }
 textarea:focus, input:focus, select:focus { outline: none; border-color: var(--rf-primary); }
+
+/* live "running" pulse for the System Logs header */
+@keyframes rf-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+.pulse-dot { animation: rf-pulse 1s ease-in-out infinite; }
