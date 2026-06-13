@@ -113,13 +113,13 @@ export function DesignTab() {
   return (
     <div style={{ display: "grid", gap: 16 }}>
       {/* top row: example gallery (left) + requirement intake (right), side by side */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 16, alignItems: "start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1.7fr minmax(0, 1fr)", gap: 16, alignItems: "start" }}>
         {/* example gallery — click to load a platform's requirement + rubric */}
         <ExampleGallery onSelect={loadExample} activeId={activeExample} />
 
         {/* intake + model */}
         <div className="card">
-          <span className="eyebrow">[ 1 · YOUR REQUIREMENT ]</span>
+          <span className="eyebrow">1 · YOUR REQUIREMENT</span>
           <p style={{ fontSize: 12.5, lineHeight: 1.5, color: "var(--rf-muted)", margin: "6px 0 0" }}>
             Describe your hardware system, or pick an example on the left.
           </p>
@@ -152,31 +152,33 @@ export function DesignTab() {
       </div>
 
       {/* work area: three designs (left, under the gallery) + live system logs (right, requirement-width) */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 16, alignItems: "start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1.7fr minmax(0, 1fr)", gap: 16, alignItems: "start" }}>
         {/* LEFT column: designs header + three candidate cards */}
         <div style={{ display: "grid", gap: 16 }}>
           <div>
-            <span className="eyebrow">[ 2 · THREE CANDIDATE DESIGNS ]</span>
+            <span className="eyebrow">2 · THREE CANDIDATE DESIGNS</span>
             <p style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", margin: "6px 0 0" }}>
               {THREE_DESIGNS_BLURB}
             </p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 12 }}>
             {(run ? orderedCandidates.map((c) => c.profile) : (PROFILES as readonly Profile[])).map((profile) => {
           const cand = run?.candidates.find((c) => c.profile === profile);
           const l = live[profile];
           const meta = PROFILE_META[profile];
           return (
-            <div className="card" key={profile} style={{ borderTop: `3px solid ${CANDIDATE_COLOR[profile]}` }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                <div title={meta.description}>
-                  <span className="col-tag" style={{ color: CANDIDATE_COLOR[profile], fontSize: 14 }}>{meta.label}</span>
-                  <div style={{ fontSize: 12.5, color: "var(--rf-muted)", marginTop: 3, lineHeight: 1.4 }}>{meta.tagline}</div>
-                  {cand && !cand.feasible && (
-                    <span style={{ fontSize: 12, color: "var(--rf-fail)" }}>infeasible</span>
-                  )}
-                </div>
-                {cand ? <RankBadge rank={cand.rank} /> : l && <span style={{ fontSize: 12, color: "var(--rf-muted)" }}>{l.status}</span>}
+            <div className="card" key={profile} style={{ borderTop: `3px solid ${CANDIDATE_COLOR[profile]}`, minWidth: 0, padding: 14 }}>
+              <div title={meta.description} style={{ minWidth: 0 }}>
+                <span className="col-tag" style={{ color: CANDIDATE_COLOR[profile], fontSize: 14 }}>{meta.label}</span>
+                <div style={{ fontSize: 12, color: "var(--rf-muted)", marginTop: 3, lineHeight: 1.4 }}>{meta.tagline}</div>
+              </div>
+              <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginTop: 8, minHeight: 22 }}>
+                {cand ? <RankBadge rank={cand.rank} /> : l && (
+                  <span style={{ fontSize: 11.5, color: "var(--rf-muted)", fontFamily: "var(--rf-mono)", border: "1px solid var(--rf-border)", borderRadius: 999, padding: "1px 8px" }}>{l.status}</span>
+                )}
+                {cand && !cand.feasible && (
+                  <span style={{ fontSize: 11.5, color: "var(--rf-fail)", fontFamily: "var(--rf-mono)" }}>infeasible</span>
+                )}
               </div>
 
               {cand ? (
@@ -195,11 +197,11 @@ export function DesignTab() {
                   </div>
                 </div>
               ) : (
-                <div style={{ marginTop: 16, fontSize: 12.5, color: "var(--rf-muted)", lineHeight: 1.5 }}>
+                <div style={{ marginTop: 12, fontSize: 12, color: "var(--rf-muted)", lineHeight: 1.45 }}>
                   {running || l ? (
                     <>
                       <div className="bar-track"><div className="bar-fill" style={{ width: `${Math.round((l?.coverage ?? 0) * 100)}%` }} /></div>
-                      <div style={{ marginTop: 6 }}>{l?.status ?? "waiting"} · {Math.round((l?.coverage ?? 0) * 100)}% coverage</div>
+                      <div style={{ marginTop: 6, fontFamily: "var(--rf-mono)" }}>{Math.round((l?.coverage ?? 0) * 100)}% coverage</div>
                     </>
                   ) : (
                     "Waiting to run — designs appear here."
@@ -221,7 +223,7 @@ export function DesignTab() {
       {/* choice bar */}
       {run && (
         <div className="card" style={{ borderColor: "var(--rf-primary)" }}>
-          <span className="eyebrow">[ 3 · PICK THE WINNING DESIGN ]</span>
+          <span className="eyebrow">3 · PICK THE WINNING DESIGN</span>
           <p style={{ fontSize: 12.5, lineHeight: 1.5, color: "var(--rf-muted)", margin: "6px 0 0" }}>
             Pick the design you'd actually build — the system learns from your choice and improves future rankings.
           </p>
@@ -251,7 +253,7 @@ export function DesignTab() {
           )}
           {distilled && (
             <div style={{ marginTop: 10, borderTop: "1px solid var(--rf-border)", paddingTop: 10 }}>
-              <span className="eyebrow">[ PREFERENCES DISTILLED FROM YOUR CHOICE ]</span>
+              <span className="eyebrow">PREFERENCES DISTILLED FROM YOUR CHOICE</span>
               {distilled.length === 0 && <div style={{ fontSize: 12.5, color: "var(--rf-muted)", marginTop: 4 }}>(recorded; no new preference)</div>}
               {distilled.map((s, i) => (
                 <div key={i} style={{ fontSize: 12.5, marginTop: 4, lineHeight: 1.5 }}>• {s}</div>
@@ -271,7 +273,7 @@ export function DesignTab() {
 function LearningPanel({ prefs }: { prefs: PreferencesInfo | null }) {
   return (
     <div className="card">
-      <span className="eyebrow">[ WHAT THE SYSTEM HAS LEARNED ]</span>
+      <span className="eyebrow">WHAT THE SYSTEM HAS LEARNED</span>
       <p style={{ fontSize: 12.5, lineHeight: 1.5, color: "var(--rf-muted)", margin: "6px 0 0" }}>
         How often your picks match the agent's #1, plus the preferences it has inferred from past choices.
       </p>

@@ -76,7 +76,7 @@ export function LearningTab() {
     <div style={{ display: "grid", gap: 16 }}>
       {/* intro + why it matters */}
       <div className="card">
-        <span className="eyebrow">[ WHAT THE SYSTEM HAS LEARNED ]</span>
+        <span className="eyebrow">WHAT THE SYSTEM HAS LEARNED</span>
         <p style={{ margin: "8px 0 0", fontSize: 15, lineHeight: 1.6, maxWidth: 760 }}>
           Ranking proposes; the human disposes — and the system <strong>learns from the disposition</strong>.
           Every choice is recorded, distilled into durable preferences, and consulted at the start of the
@@ -106,7 +106,7 @@ export function LearningTab() {
 
       {/* learned weights */}
       <div className="card">
-        <span className="eyebrow">[ LEARNED RANKING WEIGHTS ]</span>
+        <span className="eyebrow">LEARNED RANKING WEIGHTS</span>
         <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", margin: "6px 0 12px" }}>
           How your past choices have reshaped the SWAP-C composite the agent uses to rank designs.
           Each axis starts equal at 0.20; green ▲ means the loop learned to weight it more.
@@ -135,7 +135,7 @@ export function LearningTab() {
 
       {/* decision timeline */}
       <div className="card">
-        <span className="eyebrow">[ DECISION TIMELINE ]</span>
+        <span className="eyebrow">DECISION TIMELINE</span>
         <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", margin: "6px 0 0" }}>
           Every winner the human picked, in order — what the agent ranked #1 versus what was actually
           chosen, and the note that explained why.
@@ -179,7 +179,7 @@ export function LearningTab() {
 
       {/* distilled preferences */}
       <div className="card">
-        <span className="eyebrow">[ DISTILLED PREFERENCES ]</span>
+        <span className="eyebrow">DISTILLED PREFERENCES</span>
         <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", margin: "6px 0 0" }}>
           The durable rules the system extracted from those decisions. These are consulted at the
           start of every future run to reshape the soft ranking weights.
@@ -215,7 +215,7 @@ export function LearningTab() {
       {/* design examples */}
       {shownExamples.length > 0 && (
         <div className="card">
-          <span className="eyebrow">[ WHAT CHANGED ITS MIND — DESIGN EXAMPLES ]</span>
+          <span className="eyebrow">WHAT CHANGED ITS MIND — DESIGN EXAMPLES</span>
           <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", margin: "6px 0 14px" }}>
             Side by side: the design the agent ranked #1 vs the one the human actually chose. The
             axes where the human&apos;s pick scored higher are exactly what the loop learned to weight

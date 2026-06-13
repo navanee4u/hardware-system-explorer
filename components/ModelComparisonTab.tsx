@@ -164,7 +164,7 @@ export function ModelComparisonTab() {
   if (err) {
     return (
       <div className="card">
-        <span className="eyebrow">[ HOW THE AI MODELS COMPARE ]</span>
+        <span className="eyebrow">HOW THE AI MODELS COMPARE</span>
         <div style={{ marginTop: 10, fontSize: 13.5, color: "var(--rf-fail)" }}>
           Could not load runs.
         </div>
@@ -175,7 +175,7 @@ export function ModelComparisonTab() {
   if (!runs) {
     return (
       <div className="card">
-        <span className="eyebrow">[ HOW THE AI MODELS COMPARE ]</span>
+        <span className="eyebrow">HOW THE AI MODELS COMPARE</span>
         <div style={{ marginTop: 10, fontSize: 13.5, color: "var(--rf-muted)" }}>Loading…</div>
       </div>
     );
@@ -184,7 +184,7 @@ export function ModelComparisonTab() {
   if (runs.length === 0 || aggs.length === 0) {
     return (
       <div className="card">
-        <span className="eyebrow">[ HOW THE AI MODELS COMPARE ]</span>
+        <span className="eyebrow">HOW THE AI MODELS COMPARE</span>
         <div style={{ marginTop: 10, fontSize: 13.5, lineHeight: 1.5, color: "var(--rf-muted)" }}>
           No runs yet — run the same requirement across models (use the model selector on the Design
           tab) to compare how each AI model produces the best designs.
@@ -197,7 +197,7 @@ export function ModelComparisonTab() {
     <div style={{ display: "grid", gap: 16 }}>
       {/* header + legend */}
       <div className="card">
-        <span className="eyebrow">[ HOW THE AI MODELS COMPARE ]</span>
+        <span className="eyebrow">HOW THE AI MODELS COMPARE</span>
         <div style={{ marginTop: 8, fontSize: 15, lineHeight: 1.5, color: "var(--rf-text)", maxWidth: 760 }}>
           How the different AI models compare at producing the best designs — same requirement,
           different model. Each one is given the identical problem; the panels below contrast the
@@ -226,7 +226,7 @@ export function ModelComparisonTab() {
 
       {/* 1. Best-design quality by dimension — grouped bars */}
       <div className="card">
-        <span className="eyebrow">[ BEST-DESIGN QUALITY BY DIMENSION ]</span>
+        <span className="eyebrow">BEST-DESIGN QUALITY BY DIMENSION</span>
         <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", marginTop: 6, marginBottom: 8 }}>
           For each model, the average normalized SWAP-C sub-scores of its top-ranked feasible design.
           Taller bars are better (1 = best on that dimension).
@@ -240,7 +240,7 @@ export function ModelComparisonTab() {
       >
         {/* 2. iterations to converge */}
         <div className="card">
-          <span className="eyebrow">[ ITERATIONS TO CONVERGE ]</span>
+          <span className="eyebrow">ITERATIONS TO CONVERGE</span>
           <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", marginTop: 6, marginBottom: 10 }}>
             Average inner-loop passes each model needs to reach a feasible design (dot = average, bar
             = min–max spread). Fewer passes means better self-correction.
@@ -250,7 +250,7 @@ export function ModelComparisonTab() {
 
         {/* 3. feasibility rate */}
         <div className="card">
-          <span className="eyebrow">[ FEASIBILITY RATE ]</span>
+          <span className="eyebrow">FEASIBILITY RATE</span>
           <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", marginTop: 6, marginBottom: 10 }}>
             Share of each model&apos;s candidate designs that satisfy every hard requirement. Higher
             is better.
@@ -274,7 +274,7 @@ export function ModelComparisonTab() {
 
         {/* 4. cost of thinking */}
         <div className="card">
-          <span className="eyebrow">[ COST OF THINKING ]</span>
+          <span className="eyebrow">COST OF THINKING</span>
           <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", marginTop: 6, marginBottom: 10 }}>
             What each model spends to get there — tokens and wall-clock time per run, averaged. Lower
             is cheaper. Deterministic runs report no tokens.
@@ -284,7 +284,7 @@ export function ModelComparisonTab() {
 
         {/* 5. agreement rate */}
         <div className="card">
-          <span className="eyebrow">[ AGREEMENT RATE ]</span>
+          <span className="eyebrow">AGREEMENT RATE</span>
           <div style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", marginTop: 6, marginBottom: 10 }}>
             How often the human kept this model&apos;s #1 pick instead of overriding it. Higher means
             its top choice matched human taste.
