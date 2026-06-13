@@ -1,0 +1,31 @@
+{
+  "name": "hardware-system-explorer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A tradeoff-ranking hardware architect: three verified SWAP-C designs, ranked, with a human-in-the-loop choice the system learns from, and live telemetry of every step.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "golden": "vitest run tests/golden.test.ts",
+    "db:check": "node scripts/check-supabase.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.104.1",
+    "next": "^15.5.19",
+    "pg": "^8.13.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/pg": "^8.11.10",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

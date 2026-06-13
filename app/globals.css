@@ -1,0 +1,168 @@
+/* Rapidflare design language — light theme.
+   sky-blue #0284c7 primary, violet #6048f0 secondary, neutral zinc scale,
+   Geist / Geist Mono, bracketed [ EYEBROW ] labels. */
+:root {
+  --rf-primary: #0284c7;
+  --rf-secondary: #6048f0;
+  --rf-bg: #ffffff;
+  --rf-surface: #fafafa;
+  --rf-border: #e4e4e7; /* zinc-200 */
+  --rf-text: #18181b; /* zinc-900 */
+  --rf-muted: #71717a; /* zinc-500 */
+  --rf-pass: #16a34a;
+  --rf-fail: #dc2626;
+  --rf-pending: #a1a1aa;
+  --rf-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --rf-sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--rf-bg);
+  color: var(--rf-text);
+  font-family: var(--rf-sans);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.eyebrow {
+  font-family: var(--rf-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rf-muted);
+}
+.eyebrow::before {
+  content: "[ ";
+}
+.eyebrow::after {
+  content: " ]";
+}
+
+/* ---- primitives ---- */
+button {
+  font-family: inherit;
+}
+.btn {
+  border: 1px solid var(--rf-border);
+  background: #fff;
+  color: var(--rf-text);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.btn:hover {
+  border-color: var(--rf-primary);
+}
+.btn-primary {
+  background: var(--rf-primary);
+  border-color: var(--rf-primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #0369a1;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.card {
+  border: 1px solid var(--rf-border);
+  border-radius: 12px;
+  background: #fff;
+  padding: 16px;
+}
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--rf-border);
+}
+.tab {
+  padding: 10px 16px;
+  font-size: 13px;
+  border: none;
+  background: none;
+  color: var(--rf-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.tab.active {
+  color: var(--rf-primary);
+  border-bottom-color: var(--rf-primary);
+  font-weight: 600;
+}
+
+/* provenance badges */
+.badge {
+  font-family: var(--rf-mono);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.badge-kb { background: #e0f2fe; color: #0369a1; }
+.badge-web { background: #ede9fe; color: #6048f0; }
+.badge-rapidflare { background: #fef3c7; color: #b45309; }
+
+/* rank badge */
+.rank {
+  font-family: var(--rf-mono);
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 999px;
+  padding: 2px 9px;
+  border: 1px solid var(--rf-border);
+}
+.rank-1 { background: var(--rf-primary); color: #fff; border-color: var(--rf-primary); }
+.rank-2 { background: #f1f5f9; color: var(--rf-text); }
+.rank-3 { background: #fff; color: var(--rf-muted); }
+
+/* rubric checks */
+.check { display: flex; gap: 8px; align-items: baseline; font-size: 12px; padding: 3px 0; }
+.dot { width: 8px; height: 8px; border-radius: 999px; flex: none; margin-top: 4px; }
+.dot-pass { background: var(--rf-pass); }
+.dot-fail { background: var(--rf-fail); }
+.dot-pending { background: var(--rf-pending); }
+
+/* scorecard bars */
+.bar-track { height: 6px; background: #f1f5f9; border-radius: 999px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--rf-primary); border-radius: 999px; }
+
+/* telemetry */
+.telemetry { font-family: var(--rf-mono); font-size: 11px; line-height: 1.7; }
+.telemetry-row { display: flex; gap: 8px; padding: 1px 0; white-space: nowrap; }
+.telemetry-row .t-type { flex: none; width: 150px; color: var(--rf-muted); }
+.ev-provider { color: #0369a1; }
+.ev-model { color: #6048f0; }
+.ev-fail { color: var(--rf-fail); }
+.ev-pass { color: var(--rf-pass); }
+.ev-fix { color: #b45309; }
+.ev-rank { color: var(--rf-text); font-weight: 600; }
+.ev-muted { color: var(--rf-muted); }
+
+.col-tag {
+  font-family: var(--rf-mono);
+  font-size: 11px;
+  color: var(--rf-secondary);
+}
+.subsys { font-family: var(--rf-mono); font-size: 10px; color: var(--rf-muted); text-transform: uppercase; }
+input, textarea, select {
+  font-family: inherit;
+  font-size: 13px;
+  border: 1px solid var(--rf-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: var(--rf-text);
+  background: #fff;
+}
+textarea:focus, input:focus, select:focus { outline: none; border-color: var(--rf-primary); }
