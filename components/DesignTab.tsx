@@ -111,11 +111,12 @@ export function DesignTab() {
 
   return (
     <div style={{ display: "grid", gap: 16 }}>
-      {/* example gallery — click to load a platform's requirement + rubric */}
-      <ExampleGallery onSelect={loadExample} activeId={activeExample} />
+      {/* top row: example gallery (left) + requirement intake (right), side by side */}
+      <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 16, alignItems: "start" }}>
+        {/* example gallery — click to load a platform's requirement + rubric */}
+        <ExampleGallery onSelect={loadExample} activeId={activeExample} />
 
-      {/* header: intake + model + learning panel */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 16 }}>
+        {/* intake + model */}
         <div className="card">
           <span className="eyebrow">Requirement</span>
           <textarea
@@ -141,8 +142,10 @@ export function DesignTab() {
             )}
           </div>
         </div>
-        <LearningPanel prefs={prefs} />
       </div>
+
+      {/* learning panel — full-width row below the top row */}
+      <LearningPanel prefs={prefs} />
 
       {/* three systems side by side */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
