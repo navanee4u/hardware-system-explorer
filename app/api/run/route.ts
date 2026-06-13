@@ -20,9 +20,10 @@ import type { ModelId, RankWeights, Rubric } from "@/lib/schema";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-// Vercel function ceiling. A 3-candidate LLM run can be slow; 60s is the Hobby
-// cap (raise toward 300 on Pro). Deterministic runs finish in well under a second.
-export const maxDuration = 60;
+// Vercel function ceiling. A 3-candidate LLM run can be slow; on Pro the cap is
+// 300s (800s with Fluid Compute), which comfortably covers an Opus run.
+// Deterministic runs finish in well under a second.
+export const maxDuration = 300;
 
 export async function POST(req: NextRequest) {
   const body = (await req.json().catch(() => ({}))) as {
