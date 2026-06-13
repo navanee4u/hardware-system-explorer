@@ -4,6 +4,8 @@
 
 ### ▶ Live demo — **https://hardware-system-explorer.vercel.app**
 
+![Hardware Design Space Explorer — a system requirement flows into the learning AI app and out as a SWAP-C optimized hardware design.](docs/hero.jpg)
+
 ![The two loops: a deterministic verifier gates every design; a human choice teaches the system over time.](docs/architecture-loops.png)
 
 ---
