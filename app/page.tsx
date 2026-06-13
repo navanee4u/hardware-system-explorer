@@ -14,7 +14,12 @@ export default function Page() {
   return (
     <main style={{ maxWidth: 1280, margin: "0 auto", padding: "20px 24px 80px" }}>
       <header style={{ marginBottom: 16 }}>
-        <span className="eyebrow">Hardware System Explorer</span>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+          <span className="eyebrow">Hardware System Explorer</span>
+          <span style={{ fontSize: 13, color: "var(--rf-muted)", flex: "none" }}>
+            Powered by <span style={{ color: "var(--rf-primary)", fontWeight: 700 }}>Rapidflare</span>
+          </span>
+        </div>
         <h1 style={{ fontSize: 24, margin: "6px 0 6px", lineHeight: 1.25 }}>
           Three verified designs · one human choice · a system that learns
         </h1>
