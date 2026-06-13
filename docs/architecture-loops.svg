@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="600" viewBox="0 0 1080 600" font-family="Segoe UI, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="700" viewBox="0 0 1080 700" font-family="Segoe UI, Arial, sans-serif">
   <defs>
     <marker id="ag" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#94a3b8"/></marker>
     <marker id="as" markerWidth="11" markerHeight="11" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#0284c7"/></marker>
@@ -6,67 +6,84 @@
     <marker id="agr" markerWidth="11" markerHeight="11" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#16a34a"/></marker>
   </defs>
 
-  <rect width="1080" height="600" fill="#ffffff"/>
-  <rect x="0" y="0" width="1080" height="600" fill="none"/>
+  <rect width="1080" height="700" fill="#ffffff"/>
 
   <!-- title -->
-  <text x="40" y="48" font-size="24" font-weight="700" fill="#0f172a">Two loops</text>
-  <text x="40" y="74" font-size="14" fill="#64748b">A deterministic verifier gates every design · a human choice teaches the system over time.</text>
+  <text x="40" y="48" font-size="26" font-weight="700" fill="#0f172a">Hardware Design Space Explorer</text>
+  <text x="40" y="76" font-size="17" font-weight="600" fill="#0284c7">Two AI Loops to drive Self Learning</text>
 
   <!-- ===== inner loop arc (Verifier -> Proposer): fail -> revise ===== -->
-  <path d="M 520 250 C 520 150, 300 150, 300 250" fill="none" stroke="#0284c7" stroke-width="2.5" marker-end="url(#as)"/>
-  <rect x="338" y="150" width="244" height="26" rx="13" fill="#e0f2fe" stroke="#0284c7"/>
-  <text x="460" y="167" font-size="12.5" font-weight="700" fill="#0284c7" text-anchor="middle">INNER LOOP · verify every design</text>
-  <text x="410" y="205" font-size="12.5" fill="#0284c7" text-anchor="middle">✗ fails → investigate, re-source &amp; revise</text>
+  <path d="M 520 250 C 520 158, 300 158, 300 250" fill="none" stroke="#0284c7" stroke-width="2.5" marker-end="url(#as)"/>
+  <rect x="338" y="158" width="244" height="26" rx="13" fill="#e0f2fe" stroke="#0284c7"/>
+  <text x="460" y="175" font-size="12.5" font-weight="700" fill="#0284c7" text-anchor="middle">INNER LOOP · verify every design</text>
+  <text x="410" y="213" font-size="12.5" fill="#0284c7" text-anchor="middle">✗ fails → investigate, re-source &amp; revise</text>
 
   <!-- ===== spine boxes ===== -->
-  <!-- B1 requirement -->
   <g>
-    <rect x="20" y="262" width="150" height="76" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-    <text x="95" y="295" font-size="14" font-weight="700" fill="#0f172a" text-anchor="middle">Requirement</text>
-    <text x="95" y="315" font-size="11.5" fill="#64748b" text-anchor="middle">→ machine-checkable</text>
-    <text x="95" y="330" font-size="11.5" fill="#64748b" text-anchor="middle">rubric</text>
+    <rect x="20" y="272" width="150" height="76" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="95" y="305" font-size="14" font-weight="700" fill="#0f172a" text-anchor="middle">Requirement</text>
+    <text x="95" y="325" font-size="11.5" fill="#64748b" text-anchor="middle">→ machine-checkable</text>
+    <text x="95" y="340" font-size="11.5" fill="#64748b" text-anchor="middle">rubric</text>
   </g>
-  <!-- B2 proposer -->
   <g>
-    <rect x="225" y="262" width="150" height="76" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-    <text x="300" y="295" font-size="14" font-weight="700" fill="#0f172a" text-anchor="middle">Proposer</text>
-    <text x="300" y="315" font-size="11.5" fill="#64748b" text-anchor="middle">Claude model</text>
-    <text x="300" y="330" font-size="11.5" fill="#64748b" text-anchor="middle">picks a BOM</text>
+    <rect x="225" y="272" width="150" height="76" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="300" y="305" font-size="14" font-weight="700" fill="#0f172a" text-anchor="middle">Proposer</text>
+    <text x="300" y="325" font-size="11.5" fill="#64748b" text-anchor="middle">Claude model</text>
+    <text x="300" y="340" font-size="11.5" fill="#64748b" text-anchor="middle">picks a BOM</text>
   </g>
-  <!-- B3 verifier (highlighted) -->
   <g>
-    <rect x="445" y="262" width="150" height="76" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
-    <rect x="445" y="262" width="6" height="76" rx="3" fill="#16a34a"/>
-    <text x="523" y="293" font-size="14" font-weight="700" fill="#15803d" text-anchor="middle">Verifier</text>
-    <text x="523" y="313" font-size="11.5" fill="#15803d" text-anchor="middle">deterministic ·</text>
-    <text x="523" y="328" font-size="11.5" fill="#15803d" text-anchor="middle">source of truth</text>
+    <rect x="445" y="272" width="150" height="76" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+    <rect x="445" y="272" width="6" height="76" rx="3" fill="#16a34a"/>
+    <text x="523" y="303" font-size="14" font-weight="700" fill="#15803d" text-anchor="middle">Verifier</text>
+    <text x="523" y="323" font-size="11.5" fill="#15803d" text-anchor="middle">deterministic ·</text>
+    <text x="523" y="338" font-size="11.5" fill="#15803d" text-anchor="middle">source of truth</text>
   </g>
-  <!-- B4 rank -->
   <g>
-    <rect x="665" y="262" width="150" height="76" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-    <text x="740" y="295" font-size="14" font-weight="700" fill="#0f172a" text-anchor="middle">Score &amp; rank</text>
-    <text x="740" y="315" font-size="11.5" fill="#64748b" text-anchor="middle">3 designs by</text>
-    <text x="740" y="330" font-size="11.5" fill="#64748b" text-anchor="middle">SWAP-C</text>
+    <rect x="665" y="272" width="150" height="76" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="740" y="305" font-size="14" font-weight="700" fill="#0f172a" text-anchor="middle">Score &amp; rank</text>
+    <text x="740" y="325" font-size="11.5" fill="#64748b" text-anchor="middle">3 designs by</text>
+    <text x="740" y="340" font-size="11.5" fill="#64748b" text-anchor="middle">SWAP-C</text>
   </g>
-  <!-- B5 human -->
   <g>
-    <rect x="885" y="262" width="150" height="76" rx="12" fill="#ffffff" stroke="#6048f0" stroke-width="2"/>
-    <text x="960" y="293" font-size="14" font-weight="700" fill="#4338ca" text-anchor="middle">Human picks</text>
-    <text x="960" y="313" font-size="11.5" fill="#6048f0" text-anchor="middle">the winner</text>
-    <text x="960" y="328" font-size="11.5" fill="#6048f0" text-anchor="middle">(+ notes)</text>
+    <rect x="885" y="272" width="150" height="76" rx="12" fill="#ffffff" stroke="#6048f0" stroke-width="2"/>
+    <text x="960" y="303" font-size="14" font-weight="700" fill="#4338ca" text-anchor="middle">Human picks</text>
+    <text x="960" y="323" font-size="11.5" fill="#6048f0" text-anchor="middle">the winner</text>
+    <text x="960" y="338" font-size="11.5" fill="#6048f0" text-anchor="middle">(+ notes)</text>
   </g>
 
   <!-- spine arrows -->
-  <line x1="172" y1="300" x2="223" y2="300" stroke="#94a3b8" stroke-width="2" marker-end="url(#ag)"/>
-  <line x1="377" y1="300" x2="443" y2="300" stroke="#94a3b8" stroke-width="2" marker-end="url(#ag)"/>
-  <line x1="597" y1="300" x2="663" y2="300" stroke="#16a34a" stroke-width="2" marker-end="url(#agr)"/>
-  <line x1="817" y1="300" x2="883" y2="300" stroke="#94a3b8" stroke-width="2" marker-end="url(#ag)"/>
-  <text x="630" y="290" font-size="11" font-weight="700" fill="#16a34a" text-anchor="middle">✓ 100% pass</text>
+  <line x1="172" y1="310" x2="223" y2="310" stroke="#94a3b8" stroke-width="2" marker-end="url(#ag)"/>
+  <line x1="377" y1="310" x2="443" y2="310" stroke="#94a3b8" stroke-width="2" marker-end="url(#ag)"/>
+  <line x1="597" y1="310" x2="663" y2="310" stroke="#16a34a" stroke-width="2" marker-end="url(#agr)"/>
+  <line x1="817" y1="310" x2="883" y2="310" stroke="#94a3b8" stroke-width="2" marker-end="url(#ag)"/>
+  <text x="630" y="300" font-size="11" font-weight="700" fill="#16a34a" text-anchor="middle">✓ 100% pass</text>
 
   <!-- ===== outer loop arc (Human -> Proposer): distill -> consult ===== -->
-  <path d="M 960 350 C 960 520, 300 520, 300 350" fill="none" stroke="#6048f0" stroke-width="2.5" marker-end="url(#av)"/>
-  <rect x="438" y="500" width="284" height="26" rx="13" fill="#ede9fe" stroke="#6048f0"/>
-  <text x="580" y="517" font-size="12.5" font-weight="700" fill="#6048f0" text-anchor="middle">OUTER LOOP · self-learning</text>
-  <text x="580" y="475" font-size="12.5" fill="#6048f0" text-anchor="middle">distill preferences → consult at the next run → the agent's #1 converges on your taste</text>
+  <path d="M 960 360 C 960 470, 300 470, 300 360" fill="none" stroke="#6048f0" stroke-width="2.5" marker-end="url(#av)"/>
+  <rect x="438" y="452" width="284" height="26" rx="13" fill="#ede9fe" stroke="#6048f0"/>
+  <text x="580" y="469" font-size="12.5" font-weight="700" fill="#6048f0" text-anchor="middle">OUTER LOOP · self-learning</text>
+  <text x="580" y="430" font-size="12.5" fill="#6048f0" text-anchor="middle">distill preferences → consult at the next run → the agent's #1 converges on your taste</text>
+
+  <!-- ===== UI: five tabs ===== -->
+  <line x1="40" y1="538" x2="1040" y2="538" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="40" y="572" font-size="13" font-weight="700" fill="#0f172a">See every step in the app — five tabs:</text>
+
+  <!-- tab bar -->
+  <line x1="40" y1="640" x2="1040" y2="640" stroke="#e4e4e7" stroke-width="1.5"/>
+  <!-- active tab: Design -->
+  <text x="60" y="632" font-size="14.5" font-weight="700" fill="#0284c7">Design</text>
+  <rect x="60" y="638" width="58" height="3" rx="1.5" fill="#0284c7"/>
+  <text x="60" y="662" font-size="11" fill="#64748b">generate &amp; pick</text>
+  <!-- other tabs -->
+  <text x="180" y="632" font-size="14.5" font-weight="600" fill="#475569">Past Designs</text>
+  <text x="180" y="662" font-size="11" fill="#94a3b8">run history</text>
+
+  <text x="330" y="632" font-size="14.5" font-weight="600" fill="#475569">Components</text>
+  <text x="330" y="662" font-size="11" fill="#94a3b8">part library</text>
+
+  <text x="475" y="632" font-size="14.5" font-weight="600" fill="#475569">Model Comparison</text>
+  <text x="475" y="662" font-size="11" fill="#94a3b8">Claude models head-to-head</text>
+
+  <text x="700" y="632" font-size="14.5" font-weight="600" fill="#6048f0">Self Learning Insights</text>
+  <text x="700" y="662" font-size="11" fill="#94a3b8">what the system has learned</text>
 </svg>
