@@ -151,21 +151,18 @@ export function DesignTab() {
         </div>
       </div>
 
-      {/* system logs — directly below the requirement so a run's activity is instantly visible */}
-      <Telemetry events={events.length ? events : run?.telemetry ?? []} height={300} running={running} />
-
-      {/* learning panel — full-width row below the top row */}
-      <LearningPanel prefs={prefs} />
-
-      {/* three systems side by side */}
-      <div>
-        <span className="eyebrow">[ 2 · THREE CANDIDATE DESIGNS ]</span>
-        <p style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", margin: "6px 0 0" }}>
-          {THREE_DESIGNS_BLURB}
-        </p>
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
-        {(run ? orderedCandidates.map((c) => c.profile) : (PROFILES as readonly Profile[])).map((profile) => {
+      {/* work area: three designs (left, under the gallery) + live system logs (right, requirement-width) */}
+      <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 16, alignItems: "start" }}>
+        {/* LEFT column: designs header + three candidate cards */}
+        <div style={{ display: "grid", gap: 16 }}>
+          <div>
+            <span className="eyebrow">[ 2 · THREE CANDIDATE DESIGNS ]</span>
+            <p style={{ fontSize: 13, lineHeight: 1.5, color: "var(--rf-muted)", margin: "6px 0 0" }}>
+              {THREE_DESIGNS_BLURB}
+            </p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
+            {(run ? orderedCandidates.map((c) => c.profile) : (PROFILES as readonly Profile[])).map((profile) => {
           const cand = run?.candidates.find((c) => c.profile === profile);
           const l = live[profile];
           const meta = PROFILE_META[profile];
@@ -211,7 +208,14 @@ export function DesignTab() {
               )}
             </div>
           );
-        })}
+            })}
+          </div>
+        </div>
+
+        {/* RIGHT column: live system logs, requirement-width and sticky so they stay in view */}
+        <div style={{ position: "sticky", top: 16 }}>
+          <Telemetry events={events.length ? events : run?.telemetry ?? []} height={560} running={running} />
+        </div>
       </div>
 
       {/* choice bar */}
@@ -256,6 +260,9 @@ export function DesignTab() {
           )}
         </div>
       )}
+
+      {/* learning panel — full-width row below the choice bar */}
+      <LearningPanel prefs={prefs} />
 
     </div>
   );

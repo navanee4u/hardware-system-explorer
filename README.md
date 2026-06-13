@@ -1,55 +1,84 @@
 # Hardware System Explorer
 
-A tradeoff-ranking hardware architect. Given a hardware requirement, it generates **three complete, verified system designs** — each tuned to a different SWAP-C tradeoff (Size, Weight, Power, Cost) — ranks them, lets a human choose the winner, **learns from that choice**, and **shows every step of its work live**.
+> Give it a hardware requirement. Get **three complete, verified designs** — each tuned to a different trade-off — ranked, with the work shown live. Pick a winner, and the system **learns your taste** for next time.
 
-**Live:** https://hardware-system-explorer.vercel.app
+### ▶ Live demo — **https://hardware-system-explorer.vercel.app**
+
+![The two loops: a deterministic verifier gates every design; a human choice teaches the system over time.](docs/architecture-loops.png)
+
+---
+
+## The problem
+
+Specifying hardware means balancing **SWAP-C** — **S**ize, **W**eight, **P**ower, **C**ost — against dozens of hard constraints. There is rarely one right answer; there are *trade-offs*, and the right one depends on engineering judgment. Tools that emit a single answer hide that judgment. This one surfaces it: **choice, with evidence — then it learns from the choice.**
 
 ## What it does
 
-1. A requirement becomes a machine-checkable **rubric**.
-2. The agent generates **three designs** (Efficiency / Compact / Value), each gated by every hard constraint.
-3. A deterministic **verifier** — never the LLM — decides every pass/fail.
-4. The three are **ranked** by a transparent SWAP-C scorecard.
-5. A human **picks a winner** (or rejects all) with optional notes.
-6. The choice is **distilled into preferences** that reshape the next run's ranking — the agent's #1 converges on the human's taste over time.
-7. Every backend action streams live over **SSE**.
+1. Turns a plain-English requirement into a **machine-checkable rubric**.
+2. Generates **three complete designs**, each optimized for a different SWAP-C profile:
+   - **Efficiency** — lowest power, longest runtime
+   - **Compact** — smallest, lightest
+   - **Value** — cheapest, fastest to source
+3. **Gates every design with a deterministic verifier** — *never the LLM* — against every hard constraint, then ranks the three with a transparent scorecard.
+4. A **human picks the winner** (or rejects all three) with optional notes.
+5. The choice is **distilled into durable preferences** that reshape the next run's ranking. Over time, the agent's #1 **converges on your taste**.
+6. Every backend action **streams live** so you can watch the work happen.
 
-## Architecture
+## The two loops
 
-- **Verifier** (`lib/verifier.ts`) — deterministic source of truth; pure functions over `(BOM, Rubric)`. No LLM.
-- **Proposer** — deterministic (`lib/proposer.ts`) and LLM (`lib/proposer.llm.ts`), profile- and preference-biased.
-- **Inner loop** (`lib/loop.ts`) — propose → verify → revise until 100% hard coverage, then score + rank.
-- **Outer loop** (`lib/preferences.ts`) — distill decisions into durable preferences; consult at run start.
-- **Provider layer** (`lib/providers/`) — pluggable component sourcing (KB / web search / Rapidflare), KB-first with fallback.
-- **Store** (`lib/store.ts`, `lib/store.postgres.ts`) — `FileStore` (local) or `PostgresStore` (Supabase/Neon/Vercel), swappable.
-- **UI** — Next.js 15 App Router, four tabs (Design, Past Designs, Components, Model Comparison).
+The diagram above is the whole system. Two loops, cleanly separated:
 
-The verifier owns feasibility; learned preferences only reorder *feasible* designs — they can never admit an infeasible one.
+- **Inner loop — verification.** The proposer (a Claude model) picks a bill of materials; the **verifier** checks it against every hard constraint. On failure it feeds the specific failures back, the proposer re-sources and revises, and it repeats until **100% of hard constraints pass**. The **verifier is the single source of truth** — the LLM never decides pass/fail.
+- **Outer loop — self-learning.** The human picks a winner; the system distills that decision into **preferences** and consults them at the start of the next run. Preferences only ever reshape *soft* ranking weights — they can **reorder feasible designs, but never admit an infeasible one.**
 
-## Local development
+## Why it's different
+
+- **Choice with evidence, not a single answer.** Three ranked alternatives, each gated identically, each with a normalized SWAP-C scorecard and a per-constraint checklist.
+- **A verifier you can trust.** Real deterministic engineering checks — power budget, peak-power rails (P=I·V), voltage-rail coverage, endurance (Wh / avg W), thermal, mass, size/packing, compute (TOPS + RAM), sensing, comms, actuation (incl. stall current), connector mating, IP rating — with a **pass + fail unit test for every constraint**.
+- **It gets better the more you use it.** Disagreement is the strongest signal; the **agreement rate trends up** as the agent learns what you actually choose.
+- **The work is watchable.** A live **System Logs** stream shows every provider query, part selected, constraint flipped red→green, and swap that lands.
+
+## The app
+
+Five tabs:
+
+| Tab | What it shows |
+| --- | --- |
+| **Design** | Requirement intake, the three designs side-by-side (scorecards + bills of materials), the live System Logs, and the choice bar. |
+| **Past Designs** | Every run — the three designs, the human's pick, and the full replayable log. |
+| **Components** | The growing library of every real part the engine has discovered, with provenance. |
+| **Model Comparison** | How the different Claude models compare at producing the best designs — same requirement, different model. |
+| **Self Learning Insights** | The decision timeline, the learned ranking weights, and side-by-side *agent #1 vs human pick* examples that show *why* each shift happened. |
+
+## Tech
+
+- **Next.js 15** (App Router) + TypeScript — a single deployable app; backend logic in pure TS modules exposed via route handlers.
+- **Deterministic verifier** (source of truth) + **LLM proposer** (Claude), behind a pluggable **provider layer** (curated KB / web search / Rapidflare catalog).
+- **Live telemetry** over Server-Sent Events.
+- **Durable store** abstraction: **Postgres (Supabase)** in production, file-based locally — so decisions and preferences survive across deploys.
+- Deployed on **Vercel**.
+
+## Run locally
 
 ```bash
 npm install
-npm run dev          # http://localhost:3000
-npm test             # verifier + golden run (62 tests)
-npm run golden       # the CI gate: 3 ranked feasible candidates + learning reorders the next run
+npm run dev      # http://localhost:3000
+npm test         # verifier unit tests + the golden run
+npm run golden   # CI gate: 3 ranked feasible designs + a decision that reorders the next run
 ```
 
-## Environment
+All API keys are **optional** and degrade gracefully:
 
-Copy `.env.example` to `.env.local` and fill in as needed. All keys are optional — absent keys degrade gracefully (deterministic proposer, file-based store).
-
-| Var | Effect when set |
+| Var | Effect |
 | --- | --- |
-| `ANTHROPIC_API_KEY` | enables the LLM proposer + web-search provider (else deterministic + KB only) |
-| `POSTGRES_URL` | durable Postgres store (Supabase IPv4 pooler URL) instead of local files |
-| `RAPIDFLARE_API_KEY` / `RAPIDFLARE_API_BASE` | activates the Rapidflare component provider |
-| `PG_POOL_MAX` | per-instance Postgres pool size (1 for serverless) |
+| `ANTHROPIC_API_KEY` | enables the Claude proposer + web-search provider (absent → deterministic proposer + KB only) |
+| `POSTGRES_URL` | durable Postgres store (Supabase pooler URL) instead of local files |
+| `RAPIDFLARE_API_KEY` | activates the Rapidflare component provider |
 
-Helper scripts: `npm run db:check` (Supabase health) and `node scripts/db-reset.mjs` (clear tables).
+## The guarantee
 
-## Deployment
+The **verifier** — never the LLM, never a learned preference — decides every pass/fail. Always. Learned preferences only reorder *feasible* designs; they can never admit an infeasible one. The system never fabricates a passing design — an infeasible profile is reported honestly, with the specific failing constraint.
 
-Deployed on Vercel; durable state in Supabase Postgres. Pushes to `main` auto-deploy.
+---
 
-> Built with [Claude Code](https://claude.com/claude-code).
+<sub>Built with [Claude Code](https://claude.com/claude-code).</sub>
