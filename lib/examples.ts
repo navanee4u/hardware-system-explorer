@@ -11,7 +11,7 @@ import type { Rubric } from "@/lib/schema";
 
 export interface Example {
   id: string;
-  slug: string; // also the image filename: /examples/<slug>.png
+  slug: string; // also the image filename: /examples/<slug>.jpg
   title: string;
   tagline: string;
   requirement: string;

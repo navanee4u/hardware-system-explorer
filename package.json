@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "golden": "vitest run tests/golden.test.ts",
     "db:check": "node scripts/check-supabase.mjs",
-    "images": "node scripts/gen-images.mjs"
+    "images": "node scripts/gen-images.mjs",
+    "optimize-images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.104.1",
@@ -27,6 +28,7 @@
     "@types/pg": "^8.11.10",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
+    "sharp": "^0.35.1",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }

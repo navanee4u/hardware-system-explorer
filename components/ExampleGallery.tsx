@@ -68,7 +68,7 @@ export function ExampleGallery({
                   position: "relative",
                   aspectRatio: "16 / 10",
                   background: `${GRADIENTS[i % GRADIENTS.length]}, #e2e8f0`,
-                  backgroundImage: `url(/examples/${ex.slug}.png), ${GRADIENTS[i % GRADIENTS.length]}`,
+                  backgroundImage: `url(/examples/${ex.slug}.jpg), ${GRADIENTS[i % GRADIENTS.length]}`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
