@@ -1,21 +1,17 @@
 /**
  * examples.ts — the pre-loaded example gallery.
  *
- * Ten evocative hardware platforms, each shipped with a ready-to-run requirement
- * AND a machine-checkable rubric tuned against the seed KB. Nine are feasible;
- * one (the solar HALE drone) intentionally demands an endurance the KB can't meet,
- * so the demo can show the verifier honestly reporting infeasibility — never faking
- * a passing design.
- *
- * Each example frames the intelligent compute / sensing / comms / power / actuation
- * CORE of its platform, which is what the KB describes.
+ * Three evocative, visually-distinct hardware platforms, each shipped with a
+ * ready-to-run requirement AND a machine-checkable rubric tuned against the seed
+ * KB so all three are feasible. Each frames the intelligent compute / sensing /
+ * comms / power / actuation CORE of its platform, which is what the KB describes.
  */
 
 import type { Rubric } from "@/lib/schema";
 
 export interface Example {
   id: string;
-  slug: string; // also the image filename: /examples/<slug>.jpg
+  slug: string; // also the image filename: /examples/<slug>.png
   title: string;
   tagline: string;
   requirement: string;
@@ -102,75 +98,5 @@ export const EXAMPLES: Example[] = [
       "The navigation pod for a last-mile sidewalk delivery robot: vision-based obstacle avoidance, an LTE backhaul for teleop, and a long shift between charges. ≥180 min runtime, −5..+45 °C, fully weather-sealed (IP67), ≤850 g core in a 150×110×75 mm bay.",
     rubric: buildRubric({ powerW: 22, runtimeMin: 180, tempMin: -5, tempMax: 45, massG: 850, env: { l: 150, w: 110, h: 75 }, ramGb: 4, tops: 6, resMp: 8, fps: 30, lanes: 2, chains: 1, torqueNm: 0.2, ip: 67, costMax: 500, leadMax: 28, vendorsMax: 8 }),
     feasibleByDesign: true,
-  },
-  {
-    id: "ex-robotic-arm",
-    slug: "robotic-arm",
-    title: "6-DOF Collaborative Arm",
-    tagline: "Eye-in-hand vision + torque-aware joint controller",
-    requirement:
-      "The controller core for a 6-DOF collaborative robotic arm: an eye-in-hand camera for pick-and-place, a wireless cell to the fleet manager, and a joint driver sized for the wrist actuator. ≥90 min duty cycle, 0..45 °C, ≤700 g, 150×110×75 mm control box.",
-    rubric: buildRubric({ powerW: 22, runtimeMin: 90, tempMin: 0, tempMax: 45, massG: 700, env: { l: 150, w: 110, h: 75 }, ramGb: 2, tops: 0, resMp: 8, fps: 30, lanes: 2, chains: 1, torqueNm: 0.6, ip: 40, costMax: 450, leadMax: 21, vendorsMax: 8 }),
-    feasibleByDesign: true,
-  },
-  {
-    id: "ex-crop-drone",
-    slug: "crop-drone",
-    title: "Agricultural Crop-Scout Drone",
-    tagline: "High-res field imaging with on-board analysis + LTE upload",
-    requirement:
-      "A crop-scouting drone payload that captures high-resolution field imagery, runs on-board plant-health inference, and uploads over cellular. ≥45 min runtime, −5..+45 °C, IP54, ≤700 g, with a steerable camera mount.",
-    rubric: buildRubric({ powerW: 25, runtimeMin: 45, tempMin: -5, tempMax: 45, massG: 700, env: { l: 150, w: 110, h: 75 }, ramGb: 4, tops: 10, resMp: 8, fps: 20, lanes: 2, chains: 1, torqueNm: 0.15, ip: 54, costMax: 500, leadMax: 28, vendorsMax: 8 }),
-    feasibleByDesign: true,
-  },
-  {
-    id: "ex-sar-quadruped",
-    slug: "sar-quadruped",
-    title: "Search & Rescue Quadruped",
-    tagline: "Thermal-imaging sensor pack with long-range radio",
-    requirement:
-      "A sensor pack for a search-and-rescue quadruped: a thermal (LWIR) imager to find people in smoke and rubble, long-range telemetry back to the operator, and a stabilized scan mount. Rugged and weather-sealed (IP67), −10..+50 °C, ≥60 min, ≤700 g.",
-    rubric: buildRubric({ powerW: 22, runtimeMin: 60, tempMin: -10, tempMax: 50, massG: 700, env: { l: 150, w: 110, h: 75 }, ramGb: 4, tops: 6, resMp: 0.3, fps: 30, lanes: 1, chains: 1, torqueNm: 0.2, ip: 67, costMax: 1800, leadMax: 40, vendorsMax: 9 }),
-    feasibleByDesign: true,
-  },
-  {
-    id: "ex-warehouse-amr",
-    slug: "warehouse-amr",
-    title: "Warehouse AMR",
-    tagline: "Indoor autonomous mobile robot perception + Wi-Fi fleet link",
-    requirement:
-      "The perception and connectivity core for a warehouse autonomous mobile robot: vision for lane-following and obstacle detection, a Wi-Fi link to the fleet controller, and a long single-shift runtime. 0..40 °C indoors, ≥180 min, ≤700 g, 150×110×75 mm.",
-    rubric: buildRubric({ powerW: 22, runtimeMin: 180, tempMin: 0, tempMax: 40, massG: 700, env: { l: 150, w: 110, h: 75 }, ramGb: 4, tops: 6, resMp: 8, fps: 30, lanes: 2, chains: 1, torqueNm: 0.15, ip: 40, costMax: 500, leadMax: 21, vendorsMax: 8 }),
-    feasibleByDesign: true,
-  },
-  {
-    id: "ex-underwater-rov",
-    slug: "underwater-rov",
-    title: "Underwater Inspection ROV",
-    tagline: "Sealed hull-inspection camera pod for shallow dives",
-    requirement:
-      "A sealed inspection pod for a small underwater ROV doing hull and pier surveys: a detailed inspection camera, a tether-side wireless bridge, and a thruster/pan driver. Fully sealed (IP67), −5..+40 °C, ≥60 min, ≤700 g, 150×110×75 mm pressure housing core.",
-    rubric: buildRubric({ powerW: 22, runtimeMin: 60, tempMin: -5, tempMax: 40, massG: 700, env: { l: 150, w: 110, h: 75 }, ramGb: 2, tops: 0, resMp: 12, fps: 30, lanes: 2, chains: 1, torqueNm: 0.5, ip: 67, costMax: 500, leadMax: 28, vendorsMax: 8 }),
-    feasibleByDesign: true,
-  },
-  {
-    id: "ex-fpv-gimbal",
-    slug: "fpv-gimbal",
-    title: "Cinematic FPV Drone Gimbal",
-    tagline: "Light, fast global-shutter camera on a brushless gimbal",
-    requirement:
-      "A lightweight cinematic payload for an FPV drone: a global-shutter camera at high frame rate to kill jello and rolling-shutter wobble, a low-latency video link, and a brushless gimbal. Featherweight ≤450 g, 150×110×75 mm, ≥20 min, −5..+45 °C, IP54.",
-    rubric: buildRubric({ powerW: 18, runtimeMin: 20, tempMin: -5, tempMax: 45, massG: 450, env: { l: 150, w: 110, h: 75 }, ramGb: 1.5, tops: 0, resMp: 1.5, fps: 50, lanes: 2, chains: 1, torqueNm: 0.15, ip: 54, costMax: 400, leadMax: 21, vendorsMax: 7 }),
-    feasibleByDesign: true,
-  },
-  {
-    id: "ex-hale-drone",
-    slug: "hale-drone",
-    title: "Solar HALE Atmospheric Drone",
-    tagline: "Ultra-endurance stratospheric relay — pushes past the KB",
-    requirement:
-      "A high-altitude long-endurance (HALE) solar relay drone payload meant to loiter for 10+ hours: ultra-low-power compute, a wide-area downlink, and a light imaging sensor — on the smallest possible battery. ≥600 min runtime, −10..+50 °C, ≤700 g.",
-    rubric: buildRubric({ powerW: 18, runtimeMin: 600, tempMin: -10, tempMax: 50, massG: 700, env: { l: 150, w: 110, h: 75 }, ramGb: 1.5, tops: 0, resMp: 1.5, fps: 20, lanes: 2, chains: 1, torqueNm: 0.15, ip: 54, costMax: 400, leadMax: 21, vendorsMax: 7 }),
-    feasibleByDesign: false, // 600 min exceeds what the seed KB's batteries can deliver
   },
 ];
