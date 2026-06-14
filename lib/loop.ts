@@ -200,9 +200,10 @@ export async function runDesign(deps: RunDeps): Promise<DesignRun> {
           profile,
           bias: deps.bias,
           preferences: deps.preferenceStatements,
+          requirement: deps.requirement,
         });
       }
-      return new DeterministicProposer(registry, deps.rubric, profile, deps.bias);
+      return new DeterministicProposer(registry, deps.rubric, profile, deps.bias, deps.requirement);
     });
 
   const createdAt = deps.clock ? deps.clock() : new Date().toISOString();

@@ -10,7 +10,7 @@ import { PROFILE_META, THREE_DESIGNS_BLURB } from "@/lib/profiles";
 
 const SAMPLE_REQUIREMENT =
   "Design a self-contained outdoor inspection drone payload that captures imagery of power lines and rooftops " +
-  "and streams a downlink to a ground station. ≥30 min runtime, −10..+50 °C, IP54, ≤~600 g and a 150×110×75 mm " +
+  "and streams a downlink to a ground station. ≥30 min runtime, −10..+50 °C, IP54, ≤700 g and a 150×110×75 mm " +
   "envelope. Needs a Linux-class compute node, a MIPI-CSI camera ≥1.5 MP @20 fps, a wireless downlink, and a " +
   "steerable single-axis mount — from connectorized, reasonably-priced, in-stock parts.";
 

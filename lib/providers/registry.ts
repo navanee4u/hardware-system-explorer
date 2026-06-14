@@ -8,7 +8,7 @@
  * emitted inside each provider via ctx.bus, so nothing is hidden.
  */
 
-import type { Component, ComponentQuery } from "@/lib/schema";
+import type { Component, ComponentQuery, ComponentSpecs } from "@/lib/schema";
 import type {
   ComponentProvider,
   ComponentRegistry,
@@ -18,6 +18,7 @@ import type {
 import { KBProvider } from "@/lib/providers/kb";
 import { WebSearchProvider } from "@/lib/providers/websearch";
 import { RapidflareProvider } from "@/lib/providers/rapidflare";
+import { partClassHints, type ClassHint } from "@/lib/intake";
 
 export class ProviderRegistry implements ComponentRegistry {
   private readonly providers: ComponentProvider[];
@@ -52,9 +53,12 @@ export class ProviderRegistry implements ComponentRegistry {
     const key = this.config.dedupBy ?? "part_number";
 
     if ((this.config.mode ?? "fanout") === "fallback") {
-      // Priority order, short-circuit once we have enough — keeps expensive
-      // providers (web search) dormant unless the trusted KB comes up short.
+      // Priority order, short-circuit once the trusted KB actually SATISFIES the
+      // need — so expensive providers (live web search) fire only when the KB has
+      // no part that meets the spec OR none matching a named part class (e.g. an
+      // "FPGA" the KB doesn't stock), not merely when it returns <N rows.
       const minResults = this.config.minResults ?? 3;
+      const hints = partClassHints(query.text).filter((h) => h.subsystem === query.subsystem);
       const merged: Component[] = [];
       for (const p of active) {
         let res: Component[] = [];
@@ -64,7 +68,7 @@ export class ProviderRegistry implements ComponentRegistry {
           /* providers never throw, but settle defensively */
         }
         merged.push(...res);
-        if (dedup(merged, key).length >= minResults) break;
+        if (isSufficient(dedup(merged, key), query, hints, minResults)) break;
       }
       return dedup(merged, key);
     }
@@ -78,6 +82,71 @@ export class ProviderRegistry implements ComponentRegistry {
     }
     return dedup(merged, key);
   }
+}
+
+// ---------------------------------------------------------------------------
+// Fallback sufficiency: has the KB (so far) actually met the need?
+// ---------------------------------------------------------------------------
+
+const MINIMA = new Set<keyof ComponentSpecs>([
+  "ram_gb", "tops", "resolution_mp", "fps", "lanes", "chains", "torque_nm",
+  "capacity_wh", "ip_rating", "peak_supply_w", "driver_current_a",
+]);
+const MAXIMA = new Set<keyof ComponentSpecs>(["mass_g", "cost_usd", "lead_time_days", "active_w", "peak_w", "idle_w"]);
+
+/** Does this component meet the query's required spec thresholds? */
+function satisfies(specs: ComponentSpecs, required: Partial<ComponentSpecs>): boolean {
+  for (const [k, v] of Object.entries(required)) {
+    if (v == null) continue;
+    if (k === "temp_range_c") {
+      const t = specs.temp_range_c;
+      const env = v as { min: number; max: number };
+      if (!t || t.min > env.min || t.max < env.max) return false;
+      continue;
+    }
+    if (k === "bands") {
+      const have = specs.bands ?? [];
+      const want = (Array.isArray(v) ? (v as string[]) : []);
+      if (want.length === 0 || !want.every((b) => have.includes(b))) return false;
+      continue;
+    }
+    if (k === "sensor_interface") {
+      if (specs.sensor_interface !== v) return false;
+      continue;
+    }
+    if (typeof v === "number") {
+      const have = specs[k as keyof ComponentSpecs];
+      if (typeof have !== "number") return false;
+      if (MINIMA.has(k as keyof ComponentSpecs) && have < v) return false;
+      if (MAXIMA.has(k as keyof ComponentSpecs) && have > v) return false;
+    }
+    // other object keys (rails_out, envelope_mm) aren't part of a per-subsystem query
+  }
+  return true;
+}
+
+/** Does a part match a named part-class keyword (in its name / tags / part number)? */
+function matchesKeyword(c: Component, kw: string): boolean {
+  return `${c.name} ${(c.tags ?? []).join(" ")} ${c.part_number}`.toLowerCase().includes(kw);
+}
+
+/**
+ * The KB is "sufficient" for this query when it returns at least one part that
+ * MEETS the spec requirement AND (if the requirement names a part class for this
+ * subsystem) at least one part matching that class. Otherwise we fall through to
+ * the next provider (web search / Rapidflare).
+ */
+function isSufficient(
+  parts: Component[],
+  query: ComponentQuery,
+  hints: ClassHint[],
+  minResults: number,
+): boolean {
+  const req = query.required ?? {};
+  const hasReq = Object.keys(req).length > 0;
+  const fitOk = hasReq ? parts.some((c) => satisfies(c.specs, req)) : parts.length >= minResults;
+  const classOk = hints.length === 0 || hints.some((h) => parts.some((c) => matchesKeyword(c, h.keyword)));
+  return fitOk && classOk;
 }
 
 /** First-seen dedup by the chosen key; preserves input (priority) ordering. */

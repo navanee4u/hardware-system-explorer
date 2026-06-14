@@ -73,6 +73,7 @@ export interface LLMProposerOpts {
   profile: Profile;
   bias?: ProposerBias;
   preferences?: string[]; // learned preference statements (consulted at run start)
+  requirement?: string; // raw requirement text — threaded to providers for web search
   client?: Anthropic; // injectable for tests
 }
 
@@ -87,6 +88,7 @@ export class LLMProposer implements Proposer {
       opts.rubric,
       opts.profile,
       opts.bias,
+      opts.requirement,
     );
   }
 
@@ -177,7 +179,7 @@ export class LLMProposer implements Proposer {
     const pools = new Map<Subsystem, Component[]>();
     for (const subsystem of subsystemsInRubric(this.opts.rubric)) {
       const parts = await this.opts.registry.search(
-        { subsystem, required: requiredSpecsFor(subsystem, this.opts.rubric), limit: 16 },
+        { subsystem, required: requiredSpecsFor(subsystem, this.opts.rubric), text: this.opts.requirement || undefined, limit: 16 },
         { bus: ctx.bus, candidate: ctx.candidate },
       );
       if (parts.length > 0) pools.set(subsystem, parts);

@@ -145,9 +145,8 @@ function buildSearchPrompt(query: ComponentQuery, limit: number): string {
     .map(([k, v]) => `${k}=${typeof v === "object" ? JSON.stringify(v) : v}`)
     .join(", ");
   return [
-    `Find up to ${limit} REAL, currently-purchasable ${query.subsystem} components for a drone payload.`,
-    query.text ? `Context: ${query.text}` : "",
-    wants ? `Target specs to meet or beat: ${wants}.` : "",
+    `Find up to ${limit} REAL, currently-purchasable ${query.subsystem} components${query.text ? ` for this system: ${query.text}` : ""}.`,
+    wants ? `The ${query.subsystem} part should meet or beat: ${wants}.` : "",
     "For each, read the manufacturer or distributor page and extract specs VERBATIM. Include the exact source_url.",
     "Omit any spec field not stated on the page. Return them in the required JSON shape.",
   ]

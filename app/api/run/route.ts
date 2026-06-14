@@ -15,7 +15,8 @@ import { EventBus, encodeSSE } from "@/lib/telemetry";
 import { getStore } from "@/lib/store";
 import { loadEffective } from "@/lib/preferences";
 import { DEFAULT_WEIGHTS } from "@/lib/rank";
-import { DRONE_PAYLOAD_REQUIREMENT, DRONE_PAYLOAD_RUBRIC } from "@/lib/kb/sample-rubric";
+import { DRONE_PAYLOAD_REQUIREMENT } from "@/lib/kb/sample-rubric";
+import { buildRubricFromText } from "@/lib/intake";
 import type { ModelId, RankWeights, Rubric } from "@/lib/schema";
 
 export const runtime = "nodejs";
@@ -34,7 +35,9 @@ export async function POST(req: NextRequest) {
   };
 
   const requirement = body.requirement ?? DRONE_PAYLOAD_REQUIREMENT;
-  const rubric = body.rubric ?? DRONE_PAYLOAD_RUBRIC;
+  // An example card supplies its own rubric; a free-text requirement is parsed
+  // into one (intake) so typed constraints are actually tracked by the verifier.
+  const rubric = body.rubric ?? buildRubricFromText(requirement);
   const runId = `run_${Date.now().toString(36)}`;
   const bus = new EventBus(runId);
 

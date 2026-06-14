@@ -87,6 +87,7 @@ export class DeterministicProposer implements Proposer {
     private readonly rubric: Rubric,
     private readonly profile: Profile,
     private readonly bias: ProposerBias = {},
+    private readonly requirement: string = "",
   ) {}
 
   /** Build a BOM by picking each subsystem's best part for this profile. */
@@ -177,6 +178,7 @@ export class DeterministicProposer implements Proposer {
     const query: ComponentQuery = {
       subsystem,
       required: requiredSpecsFor(subsystem, this.rubric),
+      text: this.requirement || undefined,
       limit: 16,
     };
     return this.registry.search(query, { bus: ctx.bus, candidate: ctx.candidate });
