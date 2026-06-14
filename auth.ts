@@ -16,10 +16,11 @@ export const GOOGLE_CONFIGURED = Boolean(
   process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET,
 );
 
-const allowlist = (process.env.AUTH_ALLOWED_EMAILS ?? "")
-  .split(",")
-  .map((s) => s.trim().toLowerCase())
-  .filter(Boolean);
+const csv = (v?: string) =>
+  (v ?? "").split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
+
+const allowedEmails = csv(process.env.AUTH_ALLOWED_EMAILS);
+const allowedDomains = csv(process.env.AUTH_ALLOWED_DOMAINS); // e.g. "rapidflare.ai"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
@@ -33,9 +34,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     : [],
   callbacks: {
     signIn({ profile }) {
-      if (allowlist.length === 0) return true; // any Google account
+      // No restriction configured → any Google account.
+      if (allowedEmails.length === 0 && allowedDomains.length === 0) return true;
+      // Trust only Google-verified emails for allowlisting.
+      if (profile?.email_verified === false) return false;
       const email = String(profile?.email ?? "").toLowerCase();
-      return allowlist.includes(email);
+      const domain = email.split("@")[1] ?? "";
+      return allowedEmails.includes(email) || allowedDomains.includes(domain);
     },
   },
 });
