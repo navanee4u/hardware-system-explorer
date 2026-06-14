@@ -81,6 +81,12 @@ All API keys are **optional** and degrade gracefully:
 
 The **verifier** — never the LLM, never a learned preference — decides every pass/fail. Always. Learned preferences only reorder *feasible* designs; they can never admit an infeasible one. The system never fabricates a passing design — an infeasible profile is reported honestly, with the specific failing constraint.
 
+## Demo
+
+[![Watch the demo](https://img.youtube.com/vi/6HP6mD0-3xo/hqdefault.jpg)](https://www.youtube.com/watch?v=6HP6mD0-3xo)
+
+▶ **[Watch the 1-minute demo on YouTube](https://www.youtube.com/watch?v=6HP6mD0-3xo)**
+
 ---
 
 <sub>Built with [Claude Code](https://claude.com/claude-code).</sub>
