@@ -75,7 +75,7 @@ All API keys are **optional** and degrade gracefully:
 | --- | --- |
 | `ANTHROPIC_API_KEY` | enables the Claude proposer + web-search provider (absent → deterministic proposer + KB only) |
 | `POSTGRES_URL` | durable Postgres store (Supabase pooler URL) instead of local files |
-| `RAPIDFLARE_API_KEY` | activates the Rapidflare component provider |
+| `RAPIDFLARE_API_KEY` + `RAPIDFLARE_API_BASE` | activates the Rapidflare Parts Search provider — real, grounded component sourcing (fires in fallback when the local KB is thin) |
 
 ## The guarantee
 
