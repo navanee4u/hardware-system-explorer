@@ -15,55 +15,13 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { Component, ComponentQuery, ComponentSpecs, Source, Subsystem } from "@/lib/schema";
 import type { ComponentProvider, ProviderContext } from "@/lib/providers/types";
 
-/** Structured shape we ask the model to extract — every spec verbatim from a cited page. */
-const WEB_PART_SCHEMA = {
-  type: "object",
-  additionalProperties: false,
-  required: ["parts"],
-  properties: {
-    parts: {
-      type: "array",
-      items: {
-        type: "object",
-        additionalProperties: false,
-        required: ["name", "vendor", "part_number", "source_url", "specs"],
-        properties: {
-          name: { type: "string" },
-          vendor: { type: "string" },
-          part_number: { type: "string" },
-          source_url: { type: "string", description: "URL of the page the specs were read from" },
-          specs: {
-            type: "object",
-            additionalProperties: false,
-            properties: {
-              mass_g: { type: "number" },
-              cost_usd: { type: "number" },
-              lead_time_days: { type: "number" },
-              active_w: { type: "number" },
-              peak_w: { type: "number" },
-              capacity_wh: { type: "number" },
-              tops: { type: "number" },
-              ram_gb: { type: "number" },
-              resolution_mp: { type: "number" },
-              fps: { type: "number" },
-              torque_nm: { type: "number" },
-              ip_rating: { type: "number" },
-              chains: { type: "number" },
-            },
-          },
-        },
-      },
-    },
-  },
-} as const;
-
 export class WebSearchProvider implements ComponentProvider {
   readonly name = "websearch";
   readonly source: Source = "web";
   private readonly client?: Anthropic;
 
   constructor(client?: Anthropic) {
-    this.client = client ?? (process.env.ANTHROPIC_API_KEY ? new Anthropic() : undefined);
+    this.client = client ?? (process.env.ANTHROPIC_API_KEY ? new Anthropic({ maxRetries: 1 }) : undefined);
   }
 
   /** Live only when an Anthropic API key is configured. */
@@ -107,19 +65,34 @@ export class WebSearchProvider implements ComponentProvider {
       // VERBATIM specs with a source_url. The model is told never to invent a
       // number — omit it instead, so the verifier reports missing data honestly.
       const limit = query.limit ?? 5;
-      const res = await this.client!.messages.create({
-        model: "claude-opus-4-8",
-        max_tokens: 4000,
-        tools: [{ type: "web_search_20260209", name: "web_search" } as unknown as Anthropic.ToolUnion],
-        output_config: { format: { type: "json_schema", schema: WEB_PART_SCHEMA } },
-        system:
-          "You find REAL, currently-available hardware components and extract their specs VERBATIM from the " +
-          "manufacturer/distributor page you cite. Never invent or estimate a number — if a spec is not on the " +
-          "cited page, omit that field. Every part MUST include the exact source_url you read the specs from.",
-        messages: [{ role: "user", content: buildSearchPrompt(query, limit) }],
-      });
-      const text = res.content.find((b): b is Anthropic.TextBlock => b.type === "text")?.text ?? "{}";
-      const parsed = JSON.parse(text) as { parts?: RawWebPart[] };
+      // web_search is a slow, multi-step server tool (~60-90s for real research),
+      // so cap it with a request timeout. We ask for plain JSON and parse it (the
+      // structured-output param interacts badly with the web_search tool loop).
+      const res = await this.client!.messages.create(
+        {
+          model: "claude-sonnet-4-6",
+          max_tokens: 4000,
+          tools: [
+            { type: "web_search_20250305", name: "web_search", max_uses: 5 } as unknown as Anthropic.ToolUnion,
+          ],
+          system:
+            "You find REAL, currently-available hardware components and extract their specs VERBATIM from the " +
+            "manufacturer/distributor page you cite. Never invent or estimate a number — if a spec is not on the " +
+            "cited page, omit that field. Every part MUST include the exact source_url you read the specs from. " +
+            'Reply with ONLY a JSON object of the form {"parts":[{"name","vendor","part_number","source_url",' +
+            '"specs":{mass_g,cost_usd,active_w,capacity_wh,tops,ram_gb,resolution_mp,fps,torque_nm,ip_rating,chains}}]} ' +
+            "— no prose, no markdown.",
+          messages: [{ role: "user", content: buildSearchPrompt(query, limit) }],
+        },
+        { timeout: 100_000 },
+      );
+      // web_search interleaves text + tool blocks; concatenate all text, then pull
+      // the JSON object out of it (the model may still wrap it in prose/fences).
+      const text = res.content
+        .filter((b): b is Anthropic.TextBlock => b.type === "text")
+        .map((b) => b.text)
+        .join("\n");
+      const parsed = extractJson(text);
 
       const tagged: Component[] = (parsed.parts ?? [])
         .filter((p) => p.source_url && p.part_number)
@@ -198,6 +171,22 @@ function toComponent(p: RawWebPart, subsystem: Subsystem): Component {
 
 function slug(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "").slice(0, 40);
+}
+
+/** Pull a {parts:[…]} JSON object out of free-form model text (handles fences/prose). */
+function extractJson(text: string): { parts?: RawWebPart[] } {
+  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+  const body = fenced ? fenced[1] : text;
+  const start = body.indexOf("{");
+  if (start < 0) return { parts: [] };
+  for (let end = body.lastIndexOf("}"); end > start; end = body.lastIndexOf("}", end - 1)) {
+    try {
+      return JSON.parse(body.slice(start, end + 1)) as { parts?: RawWebPart[] };
+    } catch {
+      /* keep shrinking to the previous closing brace */
+    }
+  }
+  return { parts: [] };
 }
 
 function errMsg(err: unknown): string {
